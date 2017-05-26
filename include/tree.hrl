@@ -1,0 +1,1 @@
+-record(tree, {left, right, value}).
