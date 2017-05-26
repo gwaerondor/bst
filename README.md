@@ -19,10 +19,10 @@ It isn't possible, yet, to:
 - have nodes consisting of {key, value} pairs
 
 ## Build
-rebar3 compile
+```rebar3 compile```
 
 ## Test
-rebar3 eunit
+```rebar3 eunit```
 
-## <X> doesn't work for me!
-\_(ツ)_/
+## \[X\] doesn't work for me!
+¯\\\_(ツ)\_/¯
