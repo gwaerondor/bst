@@ -99,10 +99,8 @@ from_list_test() ->
     ?assertEqual(Expected, Result).
     
 to_list_breadth_first_test() ->
-    Root = tree:init(1),
-    Unbalanced = tree:insert_multiple(Root, [2, 3, 4, 5, 6, 7]),
-    Balanced = tree:balance(Unbalanced),
+    Tree = tree:from_list([1, 2, 3, 4, 5, 6, 7]),
     Expected = [4, 2, 6, 1, 3, 5, 7],
-    Result = tree:to_list_breadth_first(Balanced),
+    Result = tree:to_list_breadth_first(Tree),
     ?assertEqual(Expected, Result).
     
