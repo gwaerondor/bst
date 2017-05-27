@@ -40,6 +40,23 @@ to_list(Tree) ->
     Right = Tree#tree.right,
     [Value] ++ to_list(Left) ++ to_list(Right).
 
+to_list_breadth_first(Tree) ->
+    tlbf([Tree]).
+
+tlbf([]) ->
+    [];
+tlbf(Trees) ->
+    Child_trees = lists:flatten([get_children(Tree) || Tree <- Trees]),
+    [Tree#tree.value || Tree <- Trees] ++ tlbf(Child_trees).
+
+get_children(Tree) ->
+    get_unless_undefined(Tree#tree.left) ++ get_unless_undefined(Tree#tree.right).
+
+get_unless_undefined(undefined) ->
+    [];
+get_unless_undefined(X) ->
+    [X].
+
 balance(Tree) ->
     List = to_list(Tree),
     Sorted = qs(List),
@@ -72,3 +89,5 @@ remove_nth(N, [_|T], N) ->
     T;
 remove_nth(N, [H|T], Current) ->
     [H | remove_nth(N, T, Current + 1)].
+
+
