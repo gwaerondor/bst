@@ -4,6 +4,7 @@
 	 insert/2,
 	 insert_multiple/2,
 	 to_list/1,
+	 to_list_breadth_first/1,
 	 balance/1,
 	 from_list/1]).
 
