@@ -132,4 +132,19 @@ to_list_breadth_first_test() ->
     Expected = [{4, $d}, {2, $b}, {6, $f}, {1, $a}, {3, $c}, {5, $e}, {7, $g}],
     Result = tree:to_list_breadth_first(Tree),
     ?assertEqual(Expected, Result).
-			   
+    
+get_test() ->
+    Tree = tree:from_list([{a, "alpaca"},
+			   {b, "boar"},
+			   {c, "camel"},
+			   {d, "dromedary"}]),
+    Result = tree:get_value(d, Tree),
+    Expected = "dromedary",
+    ?assertEqual(Expected, Result).
+
+get_when_undefined_test() ->
+    Tree = tree:from_list([{a, "antimony"},
+			   {b, "bohrium"}]),
+    Result = tree:get_value(c, Tree),
+    Expected = {error, not_defined},
+    ?assertEqual(Expected, Result).

@@ -95,4 +95,17 @@ remove_nth(N, [_|T], N) ->
 remove_nth(N, [H|T], Current) ->
     [H | remove_nth(N, T, Current + 1)].
 
-
+get_value(_, undefined) ->
+    {error, not_defined};
+get_value(Key, Tree) ->
+    case Tree#tree.key of
+	Key ->
+	    Tree#tree.value;
+	_ ->
+	    case Key =< Tree#tree.key of
+		true ->
+		    get_value(Key, Tree#tree.left);
+		false ->
+		    get_value(Key, Tree#tree.right)
+	    end
+    end.
