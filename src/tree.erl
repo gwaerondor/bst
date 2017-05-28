@@ -6,7 +6,8 @@
 	 to_list/1,
 	 to_list_breadth_first/1,
 	 balance/1,
-	 from_list/1]).
+	 from_list/1,
+	 get_value/2]).
 
 -ifdef(TEST).
 -compile(export_all).
