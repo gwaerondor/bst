@@ -105,10 +105,13 @@ get_value(Key, Tree) ->
 	Key ->
 	    Tree#tree.value;
 	_ ->
-	    case Key =< Tree#tree.key of
-		true ->
-		    get_value(Key, Tree#tree.left);
-		false ->
-		    get_value(Key, Tree#tree.right)
-	    end
+	    get_from_relevant_child(Key, Tree)
+    end.
+
+get_from_relevant_child(Key, Tree) ->
+    case Key =< Tree#tree.key of
+	true ->
+	    get_value(Key, Tree#tree.left);
+	false ->
+	    get_value(Key, Tree#tree.right)
     end.
