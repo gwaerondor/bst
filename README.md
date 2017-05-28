@@ -9,14 +9,13 @@ But feel free to use it even though you shouldn't.
 
 ## Functionality
 It is possible to:
-- initialize a tree with a root node and a value.
-- add nodes to the tree.
+- initialize a tree with a root node containing a key and a value.
+- add nodes with key-value pairs to the tree.
 - rebalance the tree.
 - add a bunch of elements to the tree at the same time.
 
 It isn't possible, yet, to:
 - delete a node.
-- have nodes consisting of {key, value} pairs
 
 ## Build
 ```rebar3 compile```
