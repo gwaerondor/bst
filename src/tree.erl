@@ -26,10 +26,12 @@ insert(Tree, Key, Value) ->
     do_insert(Tree, Key, Value).
 
 do_insert(Tree, Key, Value) ->
-    case Key =< Tree#tree.key of
-	true ->
+    case Tree#tree.key of
+	Key ->
+	    Tree#tree{value = Value};
+	X when (X > Key) ->
 	    Tree#tree{left = insert(Tree#tree.left, Key, Value)};
-	false ->
+	_ ->
 	    Tree#tree{right = insert(Tree#tree.right, Key, Value)}
     end.
 

@@ -31,16 +31,6 @@ insert_greater_value_test() ->
     Result = tree:insert(Root, 200, bye),
     ?assertEqual(Expected, Result).
 
-insert_equal_key_test() ->
-    New_node = #tree{key = 100,
-		     value = another_hundo},
-    Expected = #tree{key = 100,
-		     value = one_hundo,
-		     left = New_node},
-    Root = tree:init(100, one_hundo),
-    Result = tree:insert(Root, 100, another_hundo),
-    ?assertEqual(Expected, Result).
-
 insert_a_smaller_and_an_even_smaller_key_test() ->
     Root = tree:init(3, "DREI"),
     Second_node = #tree{key = 1,
@@ -148,3 +138,10 @@ get_when_undefined_test() ->
     Result = tree:get_value(c, Tree),
     Expected = {error, not_defined},
     ?assertEqual(Expected, Result).
+
+inserting_pre_existing_key_should_overwrite_test() ->
+    Tree = tree:from_list([{1, one}, {2, two}, {3, three}]),
+    Result = tree:insert(Tree, 2, two_two),
+    Expected = tree:from_list([{1, one}, {2, two_two}, {3, three}]),
+    ?assertEqual(Expected, Result).
+    
