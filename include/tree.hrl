@@ -1,1 +1,5 @@
--record(tree, {left, right, value}).
+-record(tree, {left,
+	       right,
+	       key,
+	       value
+	      }).

@@ -1,7 +1,7 @@
 -module(tree).
 -include("tree.hrl").
--export([init/1,
-	 insert/2,
+-export([init/2,
+	 insert/3,
 	 insert_multiple/2,
 	 to_list/1,
 	 to_list_breadth_first/1,
@@ -12,34 +12,40 @@
 -compile(export_all).
 -endif.
 
-init(Value) ->
-    #tree{value = Value}.
+init(Key, Value) ->
+    #tree{key = Key,
+	  value = Value}.
 
-insert(undefined, Value) ->
-    #tree{value = Value};
-insert(Tree, Value) ->
-    do_insert(Tree, Value).
+init({Key, Value}) ->
+    init(Key, Value).
 
-do_insert(Tree, Value) ->
-    case Value =< Tree#tree.value of
+insert(undefined, Key, Value) ->
+    #tree{key = Key,
+	  value = Value};
+insert(Tree, Key, Value) ->
+    do_insert(Tree, Key, Value).
+
+do_insert(Tree, Key, Value) ->
+    case Key =< Tree#tree.key of
 	true ->
-	    Tree#tree{left = insert(Tree#tree.left, Value)};
+	    Tree#tree{left = insert(Tree#tree.left, Key, Value)};
 	false ->
-	    Tree#tree{right = insert(Tree#tree.right, Value)}
+	    Tree#tree{right = insert(Tree#tree.right, Key, Value)}
     end.
 
 insert_multiple(Tree, []) ->
     Tree;
-insert_multiple(Tree, [Value | T]) ->
-    insert_multiple(insert(Tree, Value), T).
+insert_multiple(Tree, [{Key, Value} | T]) ->
+    insert_multiple(insert(Tree, Key, Value), T).
 
 to_list(undefined) ->
     [];
 to_list(Tree) ->
+    Key = Tree#tree.key,
     Value = Tree#tree.value,
     Left = Tree#tree.left,
     Right = Tree#tree.right,
-    [Value] ++ to_list(Left) ++ to_list(Right).
+    [{Key, Value}] ++ to_list(Left) ++ to_list(Right).
 
 to_list_breadth_first(Tree) ->
     tlbf([Tree]).
@@ -48,7 +54,7 @@ tlbf([]) ->
     [];
 tlbf(Trees) ->
     Child_trees = lists:flatten([get_children(Tree) || Tree <- Trees]),
-    [Tree#tree.value || Tree <- Trees] ++ tlbf(Child_trees).
+    [{Tree#tree.key, Tree#tree.value} || Tree <- Trees] ++ tlbf(Child_trees).
 
 get_children(Tree) ->
     get_unless_undefined(Tree#tree.left) ++ get_unless_undefined(Tree#tree.right).
@@ -60,23 +66,21 @@ get_unless_undefined(X) ->
 
 balance(Tree) ->
     List = to_list(Tree),
-    Sorted = qs(List),
-    BL = balance_list(Sorted),
-    insert_multiple(init(hd(BL)), tl(BL)).
+    from_list(List).
 
 balance_list([]) ->
     [];
-balance_list(List) ->
-    Middle_index = 1 + length(List) div 2,
-    Middle = lists:nth(Middle_index, List),
-    Shorter_list = remove_nth(Middle_index, List),
+balance_list(Sorted_list) ->
+    Middle_index = 1 + length(Sorted_list) div 2,
+    Middle = lists:nth(Middle_index, Sorted_list),
+    Shorter_list = remove_nth(Middle_index, Sorted_list),
     Smaller = [X || X <- Shorter_list, X =< Middle],
     Greater = [X || X <- Shorter_list, X > Middle],
     [Middle | balance_list(Smaller) ++ balance_list(Greater)].
 
 from_list(List) ->
-    Balanced = balance_list(List),
-    insert_multiple(init(hd(Balanced)), tl(Balanced)).
+    BL = balance_list(qs(List)),
+    insert_multiple(init(hd(BL)), tl(BL)).
 
 qs([]) ->
     [];
